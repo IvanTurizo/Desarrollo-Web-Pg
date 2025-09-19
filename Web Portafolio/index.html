@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivan Turizo - Desarrollador de Software</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #0b0c13 0%, #28225e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header y Navegación */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffd700;
+        }
+
+        /* Contenido Principal */
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Página Principal */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #333;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .card h3 {
+            color: #ffed4a;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        /* Proyectos */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h4 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        /* Contacto */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .skills-grid, .projects-grid, .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Ivan Turizo</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active">Inicio</a></li>
+                <li><a href="#" onclick="showPage('about')" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#" onclick="showPage('skills')" class="nav-link">Habilidades</a></li>
+                <li><a href="#" onclick="showPage('projects')" class="nav-link">Proyectos</a></li>
+                <li><a href="#" onclick="showPage('contact')" class="nav-link">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Página Principal -->
+        <section id="home" class="page active">
+            <div class="container">
+                <div class="hero">
+                    <img src="nn.jpg" 
+                         alt="Ivan Turizo" class="profile-img">
+                    <h1>Ivan De Jesus Turizo Turizo</h1>
+                    <p>Estudiante de Ingeniria De Software | Apasionado por el Desarrollo Web</p>
+                    <a href="#" onclick="showPage('contact')" class="btn">Contáctame</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sobre Mí -->
+        <section id="about" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2>Sobre Mí</h2>
+                    <p>Soy Ivan De Jesus Turizo Turizo, tengo 21 años y soy un desarrollador apasionado por la tecnología y el desarrollo web. Actualmente curso el 5to semestre de Desarrollo de Software en la Universidad de Cartagena.</p>
+                    
+                    <h3>Formación Académica</h3>
+                    <p><strong>Universidad de Cartagena</strong><br>
+                    Desarrollo de Software - 5to Semestre<br>
+                    Enfocado en tecnologías web modernas y desarrollo de aplicaciones</p>
+                    
+                    <h3>Mi Pasión</h3>
+                    <p>Me apasiona crear soluciones innovadoras a través del código. Disfruto aprendiendo nuevas tecnologías y enfrentando desafíos que me permitan crecer como desarrollador. Mi objetivo es especializarme en desarrollo web full-stack y contribuir a proyectos que tengan un impacto positivo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Habilidades -->
+        <section id="skills" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2>Habilidades Técnicas</h2>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-icon">🌐</div>
+                            <h4>HTML & CSS</h4>
+                            <p>Desarrollo de interfaces web responsivas y modernas</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">⚡</div>
+                            <h4>JavaScript</h4>
+                            <p>Programación interactiva y dinámica en el frontend</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">☕</div>
+                            <h4>Java</h4>
+                            <p>Desarrollo de aplicaciones backend y orientado a objetos</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">📚</div>
+                            <h4>Git & GitHub</h4>
+                            <p>Control de versiones y colaboración en proyectos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyectos -->
+        <section id="projects" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2>Mis Proyectos</h2>
+                    <div class="projects-grid">
+                        <div class="project-card">
+                            <h4>🎓 Tutor Virtual</h4>
+                            <p>Plataforma web diseñada para ofrecer tutoría virtual. Sistema completo que permite la interacción entre tutores y estudiantes a través de una interfaz web moderna y funcional.</p>
+                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript</p>
+                        </div>
+                        <div class="project-card">
+                            <h4>💻 Proyectos de Práctica</h4>
+                            <p>Diversos proyectos personales desarrollados para practicar y mejorar mis habilidades en desarrollo web. Incluyen ejercicios de JavaScript, interfaces responsivas y pequeñas aplicaciones.</p>
+                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript, Java</p>
+                        </div>
+                        <div class="project-card">
+                            <h4>🚀 Portfolio Personal</h4>
+                            <p>Este mismo portafolio web que estás viendo, desarrollado con HTML, CSS y JavaScript vanilla, con diseño responsivo y animaciones modernas.</p>
+                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="https://github.com/IvanTurizo/IvanTurizo" target="_blank" class="btn">Ver más en GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contact" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2>Contacto</h2>
+                    <p>¿Interesado en trabajar conmigo o tienes alguna pregunta? ¡No dudes en contactarme!</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <h4>Email</h4>
+                            <a href="mailto:turizoivan22@gmail.com">turizoivan22@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <h4>Teléfono</h4>
+                            <a href="tel:+573117643702">+57 311 764 3702</a>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">💻</div>
+                            <h4>GitHub</h4>
+                            <a href="https://github.com/IvanTurizo/IvanTurizo" target="_blank">IvanTurizo</a>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">🎓</div>
+                            <h4>Universidad</h4>
+                            <p>Universidad de Cartagena</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Mostrar la página seleccionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Actualizar navegación activa
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Animación suave al scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card, .skill-item, .project-card, .contact-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease-in forwards';
+                    }
+                });
+            });
+
+            cards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
+</html>
