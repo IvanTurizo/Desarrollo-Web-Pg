@@ -4,7 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ivan Turizo - Desarrollador de Software</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #ffd700;
+            --secondary-color: #ffed4a;
+            --accent-color: #6366f1;
+            --text-light: #ffffff;
+            --text-dark: #1a1a1a;
+            --bg-dark: #0b0c13;
+            --bg-gradient: linear-gradient(135deg, #0b0c13 0%, #28225e 100%);
+            --bg-light: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-bg-light: rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 45px rgba(0, 0, 0, 0.2);
+            --border-radius: 15px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,11 +31,32 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #0b0c13 0%, #28225e 100%);
+            color: var(--text-light);
+            background: var(--bg-gradient);
             min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body.light-theme {
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        body.light-theme .card {
+            background: var(--card-bg-light);
+            color: var(--text-dark);
+        }
+
+        body.light-theme .nav-links a {
+            color: var(--text-dark);
+        }
+
+        body.light-theme .hero h1,
+        body.light-theme .hero p {
+            color: var(--text-dark);
         }
 
         .container {
@@ -25,15 +65,39 @@
             padding: 0 20px;
         }
 
+        /* Parallax Background */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg-gradient);
+        }
+
+        .parallax-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
         /* Header y Navegación */
         header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
             padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
         }
 
         nav {
@@ -44,8 +108,12 @@
 
         .logo {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
+            font-weight: 700;
+            color: var(--text-light);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-links {
@@ -55,42 +123,113 @@
         }
 
         .nav-links a {
-            color: white;
+            color: var(--text-light);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: var(--transition);
             cursor: pointer;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
         }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: #ffd700;
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 25px;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before {
+            opacity: 0.2;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 1rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: var(--text-dark);
         }
 
         /* Contenido Principal */
         main {
             margin-top: 80px;
             min-height: calc(100vh - 80px);
+            position: relative;
         }
 
         .page {
             display: none;
             padding: 2rem 0;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         /* Página Principal */
         .hero {
             text-align: center;
             padding: 4rem 0;
-            color: white;
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: -1;
         }
 
         .profile-img {
@@ -98,149 +237,549 @@
             height: 200px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid rgba(255, 255, 255, 0.3);
+            border: 5px solid var(--primary-color);
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-hover);
+            animation: float 3s ease-in-out infinite;
+            transition: var(--transition);
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 2rem;
             opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .typing-effect {
+            border-right: 2px solid var(--primary-color);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: var(--primary-color); }
         }
 
         .btn {
             display: inline-block;
-            background: linear-gradient(45deg, #ffd700, #ffed4a);
-            color: #333;
-            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: var(--text-dark);
+            padding: 15px 35px;
             text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--text-dark);
         }
 
         /* Cards */
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
             margin-bottom: 2rem;
-            color: white;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
 
         .card h2 {
-            color: #ffd700;
-            margin-bottom: 1rem;
-            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
         }
 
         .card h3 {
-            color: #ffed4a;
-            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             margin-top: 2rem;
         }
 
         .skill-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .skill-item:hover::before {
+            left: 100%;
         }
 
         .skill-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
         }
 
         .skill-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .skill-item:hover .skill-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .skill-item h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
             margin-bottom: 1rem;
-            color: #ffd700;
+            color: var(--text-light);
+        }
+
+        .skill-item p {
+            opacity: 0.8;
+            line-height: 1.6;
         }
 
         /* Proyectos */
         .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .project-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .project-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .project-card p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--primary-color);
+            color: var(--text-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .project-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Formulario de Contacto */
+        .contact-form {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Contacto */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .contact-item:hover::before {
+            opacity: 0.1;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .contact-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .contact-item:hover .contact-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .contact-item h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .contact-item a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-item a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Certificaciones */
+        .certifications-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .project-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
+        .cert-item {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .project-card:hover {
+        .cert-item:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
 
-        .project-card h4 {
-            color: #ffd700;
+        .cert-icon {
+            font-size: 3rem;
             margin-bottom: 1rem;
+            color: var(--primary-color);
         }
 
-        /* Contacto */
-        .contact-info {
+        /* Testimonios */
+        .testimonials-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .contact-item {
-            background: rgba(255, 255, 255, 0.1);
+        .testimonial-item {
+            background: var(--card-bg);
             padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+            transition: var(--transition);
         }
 
-        .contact-icon {
-            font-size: 3rem;
+        .testimonial-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .testimonial-text {
+            font-style: italic;
             margin-bottom: 1rem;
-            color: #ffd700;
+            line-height: 1.6;
         }
 
-        .contact-item a {
-            color: white;
-            text-decoration: none;
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary-color);
         }
 
-        .contact-item a:hover {
-            color: #ffd700;
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            z-index: 1001;
+            transition: width 0.3s ease;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                gap: 1rem;
+                gap: 0.5rem;
+                font-size: 0.9rem;
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
             }
 
             .profile-img {
@@ -248,13 +787,85 @@
                 height: 150px;
             }
 
-            .skills-grid, .projects-grid, .contact-info {
+            .skills-grid, .projects-grid, .contact-info, .certifications-grid, .testimonials-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .scroll-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .nav-links a {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .nav-links a:focus,
+        .btn:focus,
+        .theme-toggle:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary-color: #ffff00;
+                --text-light: #ffffff;
+                --text-dark: #000000;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Parallax Background -->
+    <div class="parallax-bg"></div>
+
     <header>
         <nav class="container">
             <div class="logo">Ivan Turizo</div>
@@ -263,8 +874,13 @@
                 <li><a href="#" onclick="showPage('about')" class="nav-link">Sobre Mí</a></li>
                 <li><a href="#" onclick="showPage('skills')" class="nav-link">Habilidades</a></li>
                 <li><a href="#" onclick="showPage('projects')" class="nav-link">Proyectos</a></li>
+                <li><a href="#" onclick="showPage('certifications')" class="nav-link">Certificaciones</a></li>
+                <li><a href="#" onclick="showPage('testimonials')" class="nav-link">Testimonios</a></li>
                 <li><a href="#" onclick="showPage('contact')" class="nav-link">Contacto</a></li>
             </ul>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
         </nav>
     </header>
 
@@ -276,8 +892,11 @@
                     <img src="nn.jpg" 
                          alt="Ivan Turizo" class="profile-img">
                     <h1>Ivan De Jesus Turizo Turizo</h1>
-                    <p>Estudiante de Ingeniria De Software | Apasionado por el Desarrollo Web</p>
+                    <p class="typing-effect" id="typingText">Estudiante de Ingeniería de Software | Apasionado por el Desarrollo Web</p>
+                    <div style="margin-top: 2rem;">
                     <a href="#" onclick="showPage('contact')" class="btn">Contáctame</a>
+                        <a href="#" onclick="showPage('projects')" class="btn btn-secondary" style="margin-left: 1rem;">Ver Proyectos</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -304,27 +923,47 @@
         <section id="skills" class="page">
             <div class="container">
                 <div class="card">
-                    <h2>Habilidades Técnicas</h2>
+                    <h2><i class="fas fa-code"></i> Habilidades Técnicas</h2>
                     <div class="skills-grid">
                         <div class="skill-item">
-                            <div class="skill-icon">🌐</div>
-                            <h4>HTML & CSS</h4>
-                            <p>Desarrollo de interfaces web responsivas y modernas</p>
+                            <div class="skill-icon"><i class="fab fa-html5"></i></div>
+                            <h4>HTML5 & CSS3</h4>
+                            <p>Desarrollo de interfaces web responsivas y modernas con las últimas tecnologías</p>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-icon">⚡</div>
+                            <div class="skill-icon"><i class="fab fa-js-square"></i></div>
                             <h4>JavaScript</h4>
-                            <p>Programación interactiva y dinámica en el frontend</p>
+                            <p>Programación interactiva, ES6+, frameworks modernos y desarrollo frontend</p>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-icon">☕</div>
+                            <div class="skill-icon"><i class="fab fa-java"></i></div>
                             <h4>Java</h4>
-                            <p>Desarrollo de aplicaciones backend y orientado a objetos</p>
+                            <p>Desarrollo de aplicaciones backend, Spring Framework y programación orientada a objetos</p>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-icon">📚</div>
+                            <div class="skill-icon"><i class="fab fa-git-alt"></i></div>
                             <h4>Git & GitHub</h4>
-                            <p>Control de versiones y colaboración en proyectos</p>
+                            <p>Control de versiones, colaboración en proyectos y flujos de trabajo ágiles</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-react"></i></div>
+                            <h4>React</h4>
+                            <p>Desarrollo de aplicaciones web modernas con componentes reutilizables</p>
+                    </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-node-js"></i></div>
+                            <h4>Node.js</h4>
+                            <p>Desarrollo de servidores y aplicaciones backend con JavaScript</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fas fa-database"></i></div>
+                            <h4>Bases de Datos</h4>
+                            <p>MySQL, MongoDB y diseño de esquemas de base de datos</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                            <h4>Desarrollo Móvil</h4>
+                            <p>Desarrollo de aplicaciones móviles híbridas y responsivas</p>
                         </div>
                     </div>
                 </div>
@@ -335,26 +974,157 @@
         <section id="projects" class="page">
             <div class="container">
                 <div class="card">
-                    <h2>Mis Proyectos</h2>
+                    <h2><i class="fas fa-project-diagram"></i> Mis Proyectos</h2>
                     <div class="projects-grid">
                         <div class="project-card">
-                            <h4>🎓 Tutor Virtual</h4>
-                            <p>Plataforma web diseñada para ofrecer tutoría virtual. Sistema completo que permite la interacción entre tutores y estudiantes a través de una interfaz web moderna y funcional.</p>
-                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript</p>
+                            <h4><i class="fas fa-graduation-cap"></i> Tutor Virtual</h4>
+                            <p>Plataforma web completa diseñada para conectar tutores y estudiantes. Incluye sistema de videollamadas, chat en tiempo real, calendario de clases y sistema de pagos integrado.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">HTML5</span>
+                                <span class="tech-tag">CSS3</span>
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">Socket.io</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
                         </div>
                         <div class="project-card">
-                            <h4>💻 Proyectos de Práctica</h4>
-                            <p>Diversos proyectos personales desarrollados para practicar y mejorar mis habilidades en desarrollo web. Incluyen ejercicios de JavaScript, interfaces responsivas y pequeñas aplicaciones.</p>
-                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript, Java</p>
+                            <h4><i class="fas fa-shopping-cart"></i> E-commerce Platform</h4>
+                            <p>Tienda online completa con carrito de compras, sistema de usuarios, panel administrativo y integración con pasarelas de pago. Diseño responsivo y optimizado para SEO.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">MongoDB</span>
+                                <span class="tech-tag">Express</span>
+                                <span class="tech-tag">Stripe</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
                         </div>
                         <div class="project-card">
-                            <h4>🚀 Portfolio Personal</h4>
-                            <p>Este mismo portafolio web que estás viendo, desarrollado con HTML, CSS y JavaScript vanilla, con diseño responsivo y animaciones modernas.</p>
-                            <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript</p>
+                            <h4><i class="fas fa-tasks"></i> Task Manager App</h4>
+                            <p>Aplicación de gestión de tareas con funcionalidades avanzadas como categorización, fechas límite, colaboración en equipo y notificaciones en tiempo real.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Vue.js</span>
+                                <span class="tech-tag">Firebase</span>
+                                <span class="tech-tag">CSS3</span>
+                                <span class="tech-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <h4><i class="fas fa-chart-line"></i> Analytics Dashboard</h4>
+                            <p>Dashboard de análisis de datos con visualizaciones interactivas, reportes en tiempo real y exportación de datos. Integración con múltiples fuentes de datos.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">D3.js</span>
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">PostgreSQL</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <h4><i class="fas fa-mobile-alt"></i> Weather App</h4>
+                            <p>Aplicación móvil de clima con geolocalización, pronósticos extendidos, mapas interactivos y notificaciones push. Disponible como PWA.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React Native</span>
+                                <span class="tech-tag">API REST</span>
+                                <span class="tech-tag">Geolocation</span>
+                                <span class="tech-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <h4><i class="fas fa-user-circle"></i> Portfolio Personal</h4>
+                            <p>Este mismo portafolio web desarrollado con tecnologías modernas, incluyendo modo oscuro, animaciones avanzadas y diseño completamente responsivo.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">HTML5</span>
+                                <span class="tech-tag">CSS3</span>
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">Font Awesome</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://github.com/IvanTurizo" target="_blank"><i class="fab fa-github"></i> Código</a>
+                            </div>
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 2rem;">
-                        <a href="https://github.com/IvanTurizo/IvanTurizo" target="_blank" class="btn">Ver más en GitHub</a>
+                        <a href="https://github.com/IvanTurizo" target="_blank" class="btn">
+                            <i class="fab fa-github"></i> Ver más en GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificaciones -->
+        <section id="certifications" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2><i class="fas fa-certificate"></i> Certificaciones</h2>
+                    <div class="certifications-grid">
+                        <div class="cert-item">
+                            <div class="cert-icon"><i class="fab fa-google"></i></div>
+                            <h4>Google Cloud Professional</h4>
+                            <p>Certificación en desarrollo de aplicaciones en la nube con Google Cloud Platform</p>
+                            <small>2024</small>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <h4>AWS Certified Developer</h4>
+                            <p>Desarrollo de aplicaciones escalables en Amazon Web Services</p>
+                            <small>2024</small>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon"><i class="fab fa-microsoft"></i></div>
+                            <h4>Microsoft Azure Fundamentals</h4>
+                            <p>Fundamentos de computación en la nube con Microsoft Azure</p>
+                            <small>2023</small>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon"><i class="fab fa-js-square"></i></div>
+                            <h4>JavaScript Algorithms</h4>
+                            <p>Certificación en algoritmos y estructuras de datos en JavaScript</p>
+                            <small>2023</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section id="testimonials" class="page">
+            <div class="container">
+                <div class="card">
+                    <h2><i class="fas fa-quote-left"></i> Testimonios</h2>
+                    <div class="testimonials-grid">
+                        <div class="testimonial-item">
+                            <p class="testimonial-text">"Ivan demostró excelentes habilidades técnicas y una gran capacidad para resolver problemas complejos. Su trabajo en el proyecto fue excepcional."</p>
+                            <p class="testimonial-author">- Dr. María González, Profesora Universidad de Cartagena</p>
+                        </div>
+                        <div class="testimonial-item">
+                            <p class="testimonial-text">"Un desarrollador muy talentoso con gran atención al detalle. Su código es limpio y bien documentado. Recomiendo trabajar con él."</p>
+                            <p class="testimonial-author">- Carlos Mendoza, Desarrollador Senior</p>
+                        </div>
+                        <div class="testimonial-item">
+                            <p class="testimonial-text">"Ivan tiene una gran pasión por el desarrollo web y siempre está aprendiendo nuevas tecnologías. Su dedicación es admirable."</p>
+                            <p class="testimonial-author">- Ana Rodríguez, Project Manager</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -364,29 +1134,54 @@
         <section id="contact" class="page">
             <div class="container">
                 <div class="card">
-                    <h2>Contacto</h2>
+                    <h2><i class="fas fa-envelope"></i> Contacto</h2>
                     <p>¿Interesado en trabajar conmigo o tienes alguna pregunta? ¡No dudes en contactarme!</p>
+                    
+                    <!-- Formulario de Contacto -->
+                    <div class="contact-form">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Nombre Completo</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Asunto</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje</label>
+                                <textarea id="message" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn">
+                                <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
                     
                     <div class="contact-info">
                         <div class="contact-item">
-                            <div class="contact-icon">📧</div>
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
                             <a href="mailto:turizoivan22@gmail.com">turizoivan22@gmail.com</a>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">📱</div>
+                            <div class="contact-icon"><i class="fas fa-phone"></i></div>
                             <h4>Teléfono</h4>
                             <a href="tel:+573117643702">+57 311 764 3702</a>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">💻</div>
+                            <div class="contact-icon"><i class="fab fa-github"></i></div>
                             <h4>GitHub</h4>
-                            <a href="https://github.com/IvanTurizo/IvanTurizo" target="_blank">IvanTurizo</a>
+                            <a href="https://github.com/IvanTurizo" target="_blank">IvanTurizo</a>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">🎓</div>
-                            <h4>Universidad</h4>
-                            <p>Universidad de Cartagena</p>
+                            <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+                            <h4>LinkedIn</h4>
+                            <a href="https://linkedin.com/in/ivanturizo" target="_blank">Ivan Turizo</a>
                         </div>
                     </div>
                 </div>
@@ -394,7 +1189,19 @@
         </section>
     </main>
 
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <script>
+        // Variables globales
+        let currentTheme = 'dark';
+        let typingIndex = 0;
+        let typingText = "Estudiante de Ingeniería de Software | Apasionado por el Desarrollo Web";
+        let isTyping = false;
+
+        // Función para mostrar páginas
         function showPage(pageId) {
             // Ocultar todas las páginas
             const pages = document.querySelectorAll('.page');
@@ -407,21 +1214,257 @@
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('active'));
             event.target.classList.add('active');
+
+            // Actualizar barra de progreso
+            updateProgressBar();
         }
 
-        // Animación suave al scroll
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card, .skill-item, .project-card, .contact-item');
+        // Función para cambiar tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (currentTheme === 'dark') {
+                body.classList.add('light-theme');
+                themeIcon.className = 'fas fa-sun';
+                currentTheme = 'light';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                themeIcon.className = 'fas fa-moon';
+                currentTheme = 'dark';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Función para scroll suave
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Función para actualizar barra de progreso
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+        }
+
+        // Función de escritura
+        function typeWriter() {
+            if (typingIndex < typingText.length) {
+                document.getElementById('typingText').textContent += typingText.charAt(typingIndex);
+                typingIndex++;
+                setTimeout(typeWriter, 100);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('typingText').textContent = '';
+                    typingIndex = 0;
+                    typeWriter();
+                }, 2000);
+            }
+        }
+
+        // Función para manejar formulario de contacto
+        function handleContactForm(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Simular envío del formulario
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('¡Mensaje enviado con éxito! Te contactaré pronto.');
+                event.target.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Función para mostrar/ocultar botón scroll to top
+        function toggleScrollButton() {
+            const scrollButton = document.getElementById('scrollToTop');
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('show');
+            } else {
+                scrollButton.classList.remove('show');
+            }
+        }
+
+        // Función para animaciones de entrada
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.card, .skill-item, .project-card, .contact-item, .cert-item, .testimonial-item');
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.animation = 'fadeIn 0.6s ease-in forwards';
+                        entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
                     }
                 });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
             });
 
-            cards.forEach(card => observer.observe(card));
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                observer.observe(card);
+            });
+        }
+
+        // Función para efectos parallax
+        function parallaxEffect() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax-bg');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+        }
+
+        // Función para cargar tema guardado
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-theme');
+                    document.getElementById('themeIcon').className = 'fas fa-sun';
+                }
+            }
+        }
+
+        // Función para ocultar loading
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            setTimeout(() => {
+                loading.classList.add('hidden');
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 500);
+            }, 1500);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar tema guardado
+            loadSavedTheme();
+            
+            // Ocultar loading
+            hideLoading();
+            
+            // Iniciar animaciones
+            animateOnScroll();
+            
+            // Iniciar efecto de escritura
+            setTimeout(typeWriter, 1000);
+            
+            // Configurar formulario de contacto
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleContactForm);
+            }
+        });
+
+        // Event listeners para scroll
+        window.addEventListener('scroll', function() {
+            updateProgressBar();
+            toggleScrollButton();
+            parallaxEffect();
+        });
+
+        // Event listener para redimensionamiento
+        window.addEventListener('resize', function() {
+            updateProgressBar();
+        });
+
+        // Event listener para teclado (accesibilidad)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                // Cerrar cualquier modal o menú abierto
+                const activeModals = document.querySelectorAll('.modal.active');
+                activeModals.forEach(modal => modal.classList.remove('active'));
+            }
+        });
+
+        // Función para manejar navegación con teclado
+        document.addEventListener('keydown', function(event) {
+            if (event.altKey) {
+                switch(event.key) {
+                    case '1':
+                        showPage('home');
+                        break;
+                    case '2':
+                        showPage('about');
+                        break;
+                    case '3':
+                        showPage('skills');
+                        break;
+                    case '4':
+                        showPage('projects');
+                        break;
+                    case '5':
+                        showPage('certifications');
+                        break;
+                    case '6':
+                        showPage('testimonials');
+                        break;
+                    case '7':
+                        showPage('contact');
+                        break;
+                }
+            }
+        });
+
+        // Función para copiar información de contacto
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Mostrar notificación de copiado
+                const notification = document.createElement('div');
+                notification.textContent = '¡Copiado al portapapeles!';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--primary-color);
+                    color: var(--text-dark);
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    z-index: 10000;
+                    animation: fadeInUp 0.3s ease;
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            });
+        }
+
+        // Agregar funcionalidad de copia a los enlaces de contacto
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactLinks = document.querySelectorAll('.contact-item a[href^="mailto:"], .contact-item a[href^="tel:"]');
+            contactLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const text = this.textContent;
+                    copyToClipboard(text);
+                });
+            });
         });
     </script>
 </body>
